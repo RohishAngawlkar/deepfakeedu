@@ -1,18 +1,18 @@
-import Navbar from '@/components/Navbar'
-import { Button } from '@/components/ui/button'
-import React, { useRef, useState } from 'react'
-import ReactPlayer from 'react-player'
-import { useNavigate } from 'react-router-dom'
+import Navbar from '@/components/Navbar';
+import { Button } from '@/components/ui/button';
+import React, { useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { useNavigate } from 'react-router-dom';
 
 const TaskVideo = () => {
-    const navigate = useNavigate()
-    const player1 = useRef(null)
-    const player2 = useRef(null)
-    const [playing, setPlaying] = useState(false)
+    const navigate = useNavigate();
+    const player1 = useRef(null);
+    const player2 = useRef(null);
+    const [playing, setPlaying] = useState(false);
 
     const togglePlayPause = () => {
-        setPlaying(!playing)
-    }
+        setPlaying(!playing);
+    };
 
     return (
         <>
@@ -34,17 +34,7 @@ const TaskVideo = () => {
                                     playing={playing}
                                     controls={true}
                                     width="100%"
-                                    height="auto"
-                                />
-                            </div>
-                            <div className='w-3/5'>
-                                <ReactPlayer
-                                    ref={player2}
-                                    url={"https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"}
-                                    playing={playing}
-                                    controls={true}
-                                    width="100%"
-                                    height="auto"
+                                    height="100"
                                 />
                             </div>
                         </div>
@@ -62,7 +52,7 @@ const TaskVideo = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default TaskVideo
+export default TaskVideo;
