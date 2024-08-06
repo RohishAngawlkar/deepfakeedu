@@ -1,3 +1,4 @@
+
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
 import React from 'react'
@@ -34,7 +35,7 @@ const RegistrationPage = () => {
                 <label className='block text-2xl font-semibold' htmlFor='confirm-password'>Confirm Password:</label>
                 <input type='password' id='confirm-password' className='w-2/5 rounded-full p-2 border border-gray-300' required />
               </div>
-              <Button onClick={() => navigate("generative-media-question")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>Register</Button>
+              <Button onClick={() => navigate("/generative-media-question")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>Register</Button>
             </form>
           </div>
         </div>
