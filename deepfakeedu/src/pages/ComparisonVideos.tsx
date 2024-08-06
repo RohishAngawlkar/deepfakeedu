@@ -14,16 +14,6 @@ const TaskVideo = () => {
         setPlaying(!playing)
     }
 
-    const handleSeek = (event) => {
-        const seekTo = parseFloat(event.target.value)
-        if (player1.current) {
-            player1.current.seekTo(seekTo)
-        }
-        if (player2.current) {
-            player2.current.seekTo(seekTo)
-        }
-    }
-
     return (
         <>
             <Navbar />
@@ -62,9 +52,6 @@ const TaskVideo = () => {
                             <Button onClick={togglePlayPause} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>
                                 {playing ? 'Pause Videos' : 'Play Videos'}
                             </Button>
-                        </div>
-                        <div className='w-full text-center'>
-                            <input type="range" min="0" max="1" step="0.01" onChange={handleSeek} className='w-2/5' />
                         </div>
                         <div className='w-full text-center'>
                             <Button onClick={() => navigate("/Task-Explanation")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>
