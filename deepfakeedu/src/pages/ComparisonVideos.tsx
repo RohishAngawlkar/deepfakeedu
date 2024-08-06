@@ -1,12 +1,29 @@
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import { useNavigate } from 'react-router-dom'
 
-const ComparisonVideos = () => {
+const TaskVideo = () => {
     const navigate = useNavigate()
+    const player1 = useRef(null)
+    const player2 = useRef(null)
+    const [playing, setPlaying] = useState(false)
+
+    const togglePlayPause = () => {
+        setPlaying(!playing)
+    }
+
+    const handleSeek = (event) => {
+        const seekTo = parseFloat(event.target.value)
+        if (player1.current) {
+            player1.current.seekTo(seekTo)
+        }
+        if (player2.current) {
+            player2.current.seekTo(seekTo)
+        }
+    }
+
     return (
         <>
             <Navbar />
@@ -14,23 +31,45 @@ const ComparisonVideos = () => {
                 <div className="flex items-center justify-center h-screen w-screen">
                     <div className="space-y-5">
                         <h1 className="text-center font-bold text-6xl">
-                            Comparison Videos
+                            Task Video
                         </h1>
                         <p className="text-center">
                             Can be deepfake or original?
                         </p>
-                        <div className='grid grid-cols-2 gap-5'>
-                            <div className='text-center'>
-                                <Label>Deepfake</Label>
-                                <ReactPlayer url={"https://www.youtube.com/watch?v=WL9EOfzoSsA&ab_channel=QuietQuest-StudyMusic"} />
+                        <div className='flex justify-center items-center space-x-2'>
+                            <div className='w-3/5'>
+                                <ReactPlayer
+                                    ref={player1}
+                                    url={"https://www.youtube.com/watch?v=WL9EOfzoSsA&ab_channel=QuietQuest-StudyMusic"}
+                                    playing={playing}
+                                    controls={true}
+                                    width="100%"
+                                    height="auto"
+                                />
                             </div>
-                            <div className='text-center'>
-                                <Label>Original</Label>
-                                <ReactPlayer url={"https://www.youtube.com/watch?v=WL9EOfzoSsA&ab_channel=QuietQuest-StudyMusic"} />
+                            <div className='w-3/5'>
+                                <ReactPlayer
+                                    ref={player2}
+                                    url={"https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"}
+                                    playing={playing}
+                                    controls={true}
+                                    width="100%"
+                                    height="auto"
+                                />
                             </div>
                         </div>
                         <div className='w-full text-center'>
-                            <Button onClick={() => navigate("/task-explanation")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>Next</Button>
+                            <Button onClick={togglePlayPause} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>
+                                {playing ? 'Pause Videos' : 'Play Videos'}
+                            </Button>
+                        </div>
+                        <div className='w-full text-center'>
+                            <input type="range" min="0" max="1" step="0.01" onChange={handleSeek} className='w-2/5' />
+                        </div>
+                        <div className='w-full text-center'>
+                            <Button onClick={() => navigate("/Task-Explanation")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>
+                                Next
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -39,4 +78,4 @@ const ComparisonVideos = () => {
     )
 }
 
-export default ComparisonVideos
+export default TaskVideo

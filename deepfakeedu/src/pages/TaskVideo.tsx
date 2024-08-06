@@ -21,7 +21,7 @@ const TaskVideo = () => {
                         <ReactPlayer url={"https://www.youtube.com/watch?v=WL9EOfzoSsA&ab_channel=QuietQuest-StudyMusic"} />
                     </div>
                     <div className='w-full text-center'>
-                        <Button onClick={() => navigate("/quiz-question")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>Next</Button>
+                        <Button onClick={() => navigate("/Quiz-Question")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300'>Next</Button>
                     </div>
                 </div>
             </div>
