@@ -5,8 +5,6 @@ import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import PocketBase from 'pocketbase';
 
-
-
 const TaskVideo = () => {
     const navigate = useNavigate();
     const player1 = useRef(null);
@@ -81,7 +79,7 @@ const TaskVideo = () => {
                 <div className="flex items-center justify-center h-screen w-screen">
                     <div className="space-y-5 w-4/5 bg-white shadow-lg p-10 rounded-lg">
                         <h1 className="text-center font-bold text-6xl mb-4">
-                            Comparision Video
+                            Task Video
                         </h1>
                         <p className="text-center mb-8">
                             Can be deepfake or original?
