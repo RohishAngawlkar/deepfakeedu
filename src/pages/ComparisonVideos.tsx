@@ -61,7 +61,7 @@ const TaskVideo: React.FC = () => {
         if (player2.current) player2.current.seekTo(seekTo);
     };
 
-    const handleProgress = (state: ReactPlayerProps) => {
+    const handleProgress = (state: { played: number }) => {
         setProgress(state);
     };
 
@@ -89,7 +89,7 @@ const TaskVideo: React.FC = () => {
                                             muted={true}
                                             width="100%"
                                             height="100%"
-                                            onProgress={handleProgress}
+                                            onProgress={(state) => handleProgress({ played: state.played })}
                                             config={{
                                                 file: {
                                                     attributes: {
@@ -110,7 +110,7 @@ const TaskVideo: React.FC = () => {
                                             muted={true}
                                             width="100%"
                                             height="100%"
-                                            onProgress={handleProgress}
+                                            onProgress={(state) => handleProgress({ played: state.played })}
                                             config={{
                                                 file: {
                                                     attributes: {
