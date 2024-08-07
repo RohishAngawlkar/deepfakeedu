@@ -1,17 +1,17 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
+import ReactPlayer, { ReactPlayerProps } from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import PocketBase from 'pocketbase';
 
-const TaskVideo = () => {
+const TaskVideo: React.FC = () => {
     const navigate = useNavigate();
-    const player1 = useRef(null);
-    const player2 = useRef(null);
+    const player1 = useRef<ReactPlayer>(null);
+    const player2 = useRef<ReactPlayer>(null);
     const [playing, setPlaying] = useState(false);
-    const [progress, setProgress] = useState({ played: 0 });
-    const [currentPair, setCurrentPair] = useState([]);
+    const [progress, setProgress] = useState<{ played: number }>({ played: 0 });
+    const [currentPair, setCurrentPair] = useState<string[]>([]);
 
     const pb = new PocketBase('https://genaiedu.pockethost.io'); // Update with your PocketBase URL
 
@@ -32,14 +32,10 @@ const TaskVideo = () => {
 
                 // Fetch the two random video records
                 const randomVideo1 = totalVideos[randomIndex1];
-                // const randomVideo2 = totalVideos[randomIndex2];
 
                 // Assuming the video record has two file fields: deepfake and original
                 const url1 = pb.files.getUrl(randomVideo1, randomVideo1?.deepfake);
                 const url2 = pb.files.getUrl(randomVideo1, randomVideo1?.original);
-
-                // console.log('Fetched deepfake URL:', url1); // Log the deepfake URL to the console
-                // console.log('Fetched original URL:', url2); // Log the original URL to the console
 
                 // Verify URLs are valid
                 if (url1 && url2) {
@@ -58,17 +54,14 @@ const TaskVideo = () => {
     const handlePlayPause = () => {
         setPlaying(!playing);
     };
-    console.log("Player>>>", player1);
 
-    const handleSeekChange = (e: any) => {
+    const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const seekTo = parseFloat(e.target.value);
-
-
         if (player1.current) player1.current.seekTo(seekTo);
         if (player2.current) player2.current.seekTo(seekTo);
     };
 
-    const handleProgress = (state: any) => {
+    const handleProgress = (state: ReactPlayerProps) => {
         setProgress(state);
     };
 
