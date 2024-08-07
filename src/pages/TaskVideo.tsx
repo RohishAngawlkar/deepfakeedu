@@ -3,19 +3,31 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
+import PocketBase from 'pocketbase';
 
 const TaskVideoSingle = () => {
     const navigate = useNavigate();
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
+    const pb = new PocketBase('https://genaiedu.pockethost.io/');
 
     useEffect(() => {
-        // Fetch video URLs from localStorage
-        const url1 = localStorage.getItem('video1');
-        const url2 = localStorage.getItem('video2');
+        const fetchVideo = async () => {
+            try {
+                // Fetch the videos collection from PocketBase
+                const records = await pb.collection('videos').getFullList();
 
-        // Randomly select one of the URLs
-        const selectedUrl = Math.random() < 0.5 ? url1 : url2;
-        setVideoUrl(selectedUrl);
+                // Extract URLs
+                const videoUrls = records.map(record => record.url);
+
+                // Randomly select one of the URLs
+                const selectedUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+                setVideoUrl(selectedUrl);
+            } catch (error) {
+                console.error('Error fetching video URLs:', error);
+            }
+        };
+
+        fetchVideo();
     }, []);
 
     return (
@@ -47,6 +59,7 @@ const TaskVideoSingle = () => {
                                             },
                                         },
                                     }}
+                                    style={{ border: '1px solid black' }}
                                 />
                             )}
                         </div>
