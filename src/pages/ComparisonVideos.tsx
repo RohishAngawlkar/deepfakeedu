@@ -1,7 +1,7 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer, { ReactPlayerProps } from 'react-player';
+import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import PocketBase from 'pocketbase';
 

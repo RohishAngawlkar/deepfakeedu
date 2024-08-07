@@ -1,12 +1,12 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 
 const TaskVideoSingle = () => {
     const navigate = useNavigate();
-    const [videoUrl, setVideoUrl] = useState('');
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
     useEffect(() => {
         // Fetch video URLs from localStorage
