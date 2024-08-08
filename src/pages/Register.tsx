@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import PocketBase from 'pocketbase';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-
-const pb = new PocketBase('https://genaiedu.pockethost.io/');
+import { pb } from '@/lib/utils';
 
 const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -55,7 +53,7 @@ const RegistrationPage: React.FC = () => {
                   <input
                     type="text"
                     id="username"
-                    className="w-2/5 rounded-full p-2 border border-gray-300"
+                    className="w-full rounded-full p-2 border border-gray-300"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -66,7 +64,7 @@ const RegistrationPage: React.FC = () => {
                   <input
                     type="email"
                     id="email"
-                    className="w-2/5 rounded-full p-2 border border-gray-300"
+                    className="w-full rounded-full p-2 border border-gray-300"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -77,7 +75,7 @@ const RegistrationPage: React.FC = () => {
                   <input
                     type="password"
                     id="password"
-                    className="w-2/5 rounded-full p-2 border border-gray-300"
+                    className="w-full rounded-full p-2 border border-gray-300"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -88,7 +86,7 @@ const RegistrationPage: React.FC = () => {
                   <input
                     type="password"
                     id="confirm-password"
-                    className="w-2/5 rounded-full p-2 border border-gray-300"
+                    className="w-full rounded-full p-2 border border-gray-300"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required

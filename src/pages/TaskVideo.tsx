@@ -3,56 +3,62 @@ import Navbar from '@/components/Navbar'; // Ensure this path is correct
 import { Button } from '@/components/ui/button'; // Ensure this path is correct
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-interface Video {
-    id: string;
-    collectionId: string;
-    deepfake?: string;
-    original?: string;
-}
+import { pb } from '@/lib/utils';
 
 const TaskVideo: React.FC = () => {
     const [videoUrl, setVideoUrl] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
-    const [videoKey, setVideoKey] = useState<number>(Date.now()); // Unique key for ReactPlayer to force re-render
+    // @ts-ignore
+    const [videoKey, setVideoKey] = useState<number>(Date.now());
+    const [randomVideo, setRandomVideo] = useState<any>(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchVideo = async () => {
-            try {
-                // Randomly decide to fetch a deepfake or original video
-                const isDeepfake = Math.random() < 0.5;
-                const column = isDeepfake ? 'deepfake' : 'original';
-                const response = await axios.get<{ items: Video[] }>(
-                    `https://genaiedu.pockethost.io/api/collections/videos/records?filter=${column}!=null&limit=1`
-                );
+    const fetchVideoHandler = async () => {
+        try {
+            const records = await pb.collection('Videos').getFullList({
+                sort: '-created',
+            });
 
-                const videos = response.data.items;
-                console.log('Fetched video:', videos); // Log fetched video
-
-                if (videos && videos.length > 0) {
-                    const video = videos[0];
-                    const url = isDeepfake ? video.deepfake : video.original;
-
-                    if (url) {
-                        setVideoUrl(`https://genaiedu.pockethost.io/api/files/${video.collectionId}/${video.id}/${url}`);
-                        setVideoKey(Date.now()); // Update the key to force ReactPlayer re-render
-                    } else {
-                        console.error('No valid video URL found in the selected video');
-                    }
-                } else {
-                    console.error('No video found in the response');
-                }
-            } catch (error) {
-                console.error('Error fetching video data:', error);
-            } finally {
-                setLoading(false); // Set loading to false after the video is fetched
+            if (records.length === 0) {
+                console.error('No video records found.');
+                return;
             }
-        };
 
-        fetchVideo();
+            function randomIntFromInterval(min: number, max: number) {
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+            const rndInt = randomIntFromInterval(0, records.length - 1);
+            const selectedVideo = records[rndInt];
+            const videoRandomizerNumber = Math.floor(Math.random() * 10);
+
+            setRandomVideo(selectedVideo);
+
+            if (videoRandomizerNumber % 2 === 0) {
+                setVideoUrl(selectedVideo.deepfake);
+            } else {
+                setVideoUrl(selectedVideo.original);
+            }
+
+            console.log('Selected video:', selectedVideo);
+            console.log('Video URL:', videoRandomizerNumber % 2 === 0 ? selectedVideo.deepfake : selectedVideo.original);
+
+        } catch (error) {
+            console.error('Error fetching video records:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchVideoHandler();
     }, []);
+
+    useEffect(() => {
+        if (randomVideo && videoUrl) {
+            const videoUrlString = `https://genaiedu.pockethost.io/api/files/${randomVideo.collectionId}/${randomVideo.id}/${videoUrl}`;
+            console.log('Constructed video URL:', videoUrlString);
+            setLoading(false);
+        }
+    }, [randomVideo, videoUrl]);
 
     return (
         <>
@@ -66,7 +72,11 @@ const TaskVideo: React.FC = () => {
                             {loading ? (
                                 <p>Loading video...</p>
                             ) : (
-                                <ReactPlayer key={videoKey} url={videoUrl} controls />
+                                <ReactPlayer
+                                    key={videoKey}
+                                    url={videoUrl ? `https://genaiedu.pockethost.io/api/files/${randomVideo.collectionId}/${randomVideo.id}/${videoUrl}` : ""}
+                                    controls
+                                />
                             )}
                         </div>
                         <div className="w-full text-center">

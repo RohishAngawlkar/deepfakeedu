@@ -4,16 +4,16 @@ import { Button } from "../ui/button";
 const Welcome = () => {
   const navigate = useNavigate()
 
-  const handleLoginClick = ()=>{
+  const handleLoginClick = () => {
     navigate("/login")
   }
 
-  const handleRegisterClick = ()=>{
+  const handleRegisterClick = () => {
     navigate("/register")
   }
   return (
     <div className="">
-      <div className="flex items-center justify-center h-screen w-screen">
+      <div className="flex items-center justify-center h-screen ">
         <div className="2xl:w-1/4 xl:w-1/3 lg:w-1/3 space-y-5">
           <h1 className="text-center font-bold text-6xl">
             {"Welcome to (Social Media)"}

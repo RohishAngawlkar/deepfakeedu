@@ -1,31 +1,38 @@
-import React, { useState } from 'react';
-import PocketBase from 'pocketbase';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { pb } from '@/lib/utils';
+import { useCookies } from 'react-cookie'
 
-const pb = new PocketBase('https://genaiedu.pockethost.io/');
+
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  // @ts-ignore
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await pb.collection('users').authWithPassword(email, password);
-      console.log('Logged in successfully');
-      navigate('/generative-media-question');
+      await pb.collection('users').authWithPassword(email, password).then((user) => {
+        console.log(user?.token);
+
+        navigate('/generative-media-question');
+        setCookie('user', user?.token)
+
+      });
     } catch (err) {
       setError('Invalid credentials. Please try again.');
     }
   };
 
-  const handleForgotPassword = () => {
-    navigate('/forgot-password'); // Assuming you have a route for forgot password
-  };
+  useEffect(() => {
+    if (pb?.authStore?.isValid) navigate('/generative-media-question')
+  })
 
   return (
     <>
@@ -42,22 +49,22 @@ const LoginPage: React.FC = () => {
             <div className='w-full'>
               <form className='space-y-4' onSubmit={handleLogin}>
                 <div>
-                  <label className='block text-2xl font-semibold' htmlFor='email'>Email:</label>
+                  <label className='block text-2xl font-semibold' htmlFor='email'>Email</label>
                   <input
                     type='email'
                     id='email'
-                    className='w-2/5 rounded-full p-2 border border-gray-300'
+                    className='w-full rounded-full p-2 border border-gray-300 pl-5'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
                 <div>
-                  <label className='block text-2xl font-semibold' htmlFor='password'>Password:</label>
+                  <label className='block text-2xl font-semibold' htmlFor='password'>Password</label>
                   <input
                     type='password'
                     id='password'
-                    className='w-2/5 rounded-full p-2 border border-gray-300'
+                    className='w-full rounded-full p-2 border border-gray-300 pl-5'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -68,14 +75,6 @@ const LoginPage: React.FC = () => {
                   <Button type='submit'>Log In</Button>
                 </div>
               </form>
-              <div className="mt-4">
-                <button
-                  onClick={handleForgotPassword}
-                  className="text-blue-500 hover:underline"
-                >
-                  Forgot Password?
-                </button>
-              </div>
             </div>
           </div>
         </div>

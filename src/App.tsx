@@ -6,7 +6,9 @@ function App() {
     <>
       <h1 className=""></h1>
       {/* Navbar */}
-      <Navbar />
+      <div className="sticky top-0 container">
+        <Navbar />
+      </div>
       {/* Welcome Section */}
       <Welcome />
     </>

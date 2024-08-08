@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
-import PocketBase from 'pocketbase';
+import { pb } from '@/lib/utils';
 
 const TaskVideo: React.FC = () => {
     const navigate = useNavigate();
@@ -12,8 +12,6 @@ const TaskVideo: React.FC = () => {
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState<{ played: number }>({ played: 0 });
     const [currentPair, setCurrentPair] = useState<string[]>([]);
-
-    const pb = new PocketBase('https://genaiedu.pockethost.io'); // Update with your PocketBase URL
 
     useEffect(() => {
         const fetchRandomVideo = async () => {
