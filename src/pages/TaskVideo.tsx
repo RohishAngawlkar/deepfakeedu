@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '@/components/Navbar'; // Ensure this path is correct
-import { Button } from '@/components/ui/button'; // Ensure this path is correct
+import Navbar from '@/components/Navbar';
+import { Button } from '@/components/ui/button';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import { pb } from '@/lib/utils';
+import { videoValidationStore } from '@/lib/store';
+
+interface VideoRecord {
+    collectionId: string;
+    id: string;
+    deepfake: string;
+    original: string;
+}
 
 const TaskVideo: React.FC = () => {
     const [videoUrl, setVideoUrl] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
-    // @ts-ignore
-    const [videoKey, setVideoKey] = useState<number>(Date.now());
-    const [randomVideo, setRandomVideo] = useState<any>(null);
+    const [randomVideo, setRandomVideo] = useState<VideoRecord | null>(null);
+    const [isDeepfake, setIsDeepfake] = useState<boolean | null>(null);
+
+    const setVideoValidation = videoValidationStore((state) => state.setIsVideoDeepfake);
     const navigate = useNavigate();
 
     const fetchVideoHandler = async () => {
         try {
-            const records = await pb.collection('Videos').getFullList({
+            const records = await pb.collection('Videos').getFullList<VideoRecord>({
                 sort: '-created',
             });
 
@@ -24,9 +33,9 @@ const TaskVideo: React.FC = () => {
                 return;
             }
 
-            function randomIntFromInterval(min: number, max: number) {
+            const randomIntFromInterval = (min: number, max: number) => {
                 return Math.floor(Math.random() * (max - min + 1) + min);
-            }
+            };
 
             const rndInt = randomIntFromInterval(0, records.length - 1);
             const selectedVideo = records[rndInt];
@@ -36,13 +45,11 @@ const TaskVideo: React.FC = () => {
 
             if (videoRandomizerNumber % 2 === 0) {
                 setVideoUrl(selectedVideo.deepfake);
+                setIsDeepfake(true); // Set deepfake state
             } else {
                 setVideoUrl(selectedVideo.original);
+                setIsDeepfake(false); // Set original state
             }
-
-            console.log('Selected video:', selectedVideo);
-            console.log('Video URL:', videoRandomizerNumber % 2 === 0 ? selectedVideo.deepfake : selectedVideo.original);
-
         } catch (error) {
             console.error('Error fetching video records:', error);
         }
@@ -54,34 +61,40 @@ const TaskVideo: React.FC = () => {
 
     useEffect(() => {
         if (randomVideo && videoUrl) {
-            const videoUrlString = `https://genaiedu.pockethost.io/api/files/${randomVideo.collectionId}/${randomVideo.id}/${videoUrl}`;
-            console.log('Constructed video URL:', videoUrlString);
             setLoading(false);
         }
     }, [randomVideo, videoUrl]);
 
+    const handleNextClick = () => {
+        if (isDeepfake !== null) {
+            setVideoValidation(isDeepfake);  // Ensure not null
+            navigate('/Quiz-Question');
+        } else {
+            console.error('The video deepfake state is not set.');
+        }
+    };
+
     return (
         <>
             <Navbar />
-            <div className="antialiased">
-                <div className="flex items-center justify-center h-screen w-screen">
-                    <div className="space-y-5">
-                        <h1 className="text-center font-bold text-6xl">Task Video</h1>
-                        <p className="text-center">Can be deepfake or original?</p>
-                        <div className="text-center">
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="space-y-5 text-center">
+                        <h1 className="font-bold text-6xl">Task Video</h1>
+                        <p>Can be deepfake or original?</p>
+                        <div>
                             {loading ? (
                                 <p>Loading video...</p>
                             ) : (
                                 <ReactPlayer
-                                    key={videoKey}
-                                    url={videoUrl ? `https://genaiedu.pockethost.io/api/files/${randomVideo.collectionId}/${randomVideo.id}/${videoUrl}` : ""}
+                                    url={videoUrl ? `https://genaiedu.pockethost.io/api/files/${randomVideo?.collectionId}/${randomVideo?.id}/${videoUrl}` : ""}
                                     controls
                                 />
                             )}
                         </div>
-                        <div className="w-full text-center">
+                        <div>
                             <Button
-                                onClick={() => navigate('/Quiz-Question')}
+                                onClick={handleNextClick}
                                 className="rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300"
                             >
                                 Next

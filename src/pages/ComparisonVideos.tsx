@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
 import { pb } from '@/lib/utils';
@@ -66,64 +66,66 @@ const TaskVideo: React.FC = () => {
     return (
         <>
             <Navbar />
-            <div className="antialiased">
-                <div className="flex items-center justify-center h-screen w-screen">
-                    <div className="space-y-5 w-4/5 bg-white shadow-lg p-10 rounded-lg">
-                        <h1 className="text-center font-bold text-6xl mb-4">
+            <div className="antialiased min-h-screen bg-gray-100">
+                <div className="flex items-center justify-center min-h-screen">
+                    <div className="space-y-5 w-11/12 lg:w-4/5 bg-white shadow-lg p-5 lg:p-10 rounded-lg">
+                        <h1 className="text-center font-bold text-2xl lg:text-6xl mb-4">
                             Task Video
                         </h1>
-                        <p className="text-center mb-8">
+                        <p className="text-center mb-8 text-sm lg:text-base">
                             Can be deepfake or original?
                         </p>
-                        <div className='flex justify-center items-center space-x-4'>
-                            {currentPair.length === 2 && (
-                                <>
-                                    <div className='relative w-1/2 h-[360px] border border-gray-300 rounded-lg overflow-hidden'>
-                                        <ReactPlayer
-                                            ref={player1}
-                                            url={currentPair[0]}
-                                            playing={playing}
-                                            controls={false}
-                                            muted={true}
-                                            width="100%"
-                                            height="100%"
-                                            onProgress={(state) => handleProgress({ played: state.played })}
-                                            config={{
-                                                file: {
-                                                    attributes: {
-                                                        disablePictureInPicture: true,
-                                                        controlsList: 'nodownload',
+                        <div className='flex flex-col lg:flex-row justify-center items-center space-y-4 lg:space-y-0 lg:space-x-4'>
+                            <Suspense fallback="Loading...">
+                                {currentPair.length === 2 && (
+                                    <>
+                                        <div className='relative w-full lg:w-1/2 h-[200px] lg:h-[360px] border border-gray-300 rounded-lg overflow-hidden'>
+                                            <ReactPlayer
+                                                ref={player1}
+                                                url={currentPair[0]}
+                                                playing={playing}
+                                                controls={false}
+                                                muted={true}
+                                                width="100%"
+                                                height="100%"
+                                                onProgress={(state) => handleProgress({ played: state.played })}
+                                                config={{
+                                                    file: {
+                                                        attributes: {
+                                                            disablePictureInPicture: true,
+                                                            controlsList: 'nodownload',
+                                                        },
                                                     },
-                                                },
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 w-full h-full bg-transparent pointer-events-none"></div>
-                                    </div>
-                                    <div className='relative w-1/2 h-[360px] border border-gray-300 rounded-lg overflow-hidden'>
-                                        <ReactPlayer
-                                            ref={player2}
-                                            url={currentPair[1]}
-                                            playing={playing}
-                                            controls={false}
-                                            muted={true}
-                                            width="100%"
-                                            height="100%"
-                                            onProgress={(state) => handleProgress({ played: state.played })}
-                                            config={{
-                                                file: {
-                                                    attributes: {
-                                                        disablePictureInPicture: true,
-                                                        controlsList: 'nodownload',
+                                                }}
+                                            />
+                                            <div className="absolute inset-0 w-full h-full bg-transparent pointer-events-none"></div>
+                                        </div>
+                                        <div className='relative w-full lg:w-1/2 h-[200px] lg:h-[360px] border border-gray-300 rounded-lg overflow-hidden'>
+                                            <ReactPlayer
+                                                ref={player2}
+                                                url={currentPair[1]}
+                                                playing={playing}
+                                                controls={false}
+                                                muted={true}
+                                                width="100%"
+                                                height="100%"
+                                                onProgress={(state) => handleProgress({ played: state.played })}
+                                                config={{
+                                                    file: {
+                                                        attributes: {
+                                                            disablePictureInPicture: true,
+                                                            controlsList: 'nodownload',
+                                                        },
                                                     },
-                                                },
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 w-full h-full bg-transparent pointer-events-none"></div>
-                                    </div>
-                                </>
-                            )}
+                                                }}
+                                            />
+                                            <div className="absolute inset-0 w-full h-full bg-transparent pointer-events-none"></div>
+                                        </div>
+                                    </>
+                                )}
+                            </Suspense>
                         </div>
-                        <div className="flex justify-center items-center space-x-4 mt-6">
+                        <div className="flex flex-col lg:flex-row justify-center items-center space-y-4 lg:space-y-0 lg:space-x-4 mt-6">
                             <Button onClick={handlePlayPause} className='rounded-full bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300 px-6 py-2'>
                                 {playing ? 'Pause' : 'Play'}
                             </Button>
@@ -134,11 +136,11 @@ const TaskVideo: React.FC = () => {
                                 step="any"
                                 value={progress.played}
                                 onChange={handleSeekChange}
-                                className="w-1/2"
+                                className="w-full lg:w-1/2"
                             />
                         </div>
                         <div className='w-full text-center mt-8'>
-                            <Button onClick={() => navigate("/Task-Explanation")} className='rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300 px-6 py-2'>
+                            <Button onClick={() => navigate("/Task-Explanation")} className='rounded-full w-full lg:w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300 px-6 py-2'>
                                 Next
                             </Button>
                         </div>

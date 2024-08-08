@@ -1,14 +1,47 @@
-import Navbar from '@/components/Navbar'
-import { Button } from '@/components/ui/button'
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import Navbar from '@/components/Navbar';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useNavigate } from 'react-router-dom';
+import { videoValidationStore } from '@/lib/store';
+import { pb } from '@/lib/utils';
 
-const QuizQuestion = () => {
-    const navigate = useNavigate()
-    const handleNextClick = () => {
-        navigate("/result")
+type TTaskVideo = {
+    user: string;
+    answer_selected: string;
+    video_isDeepFake: boolean;
+}
+
+const QuizQuestion: React.FC = () => {
+    const [answer, setAnswer] = useState<string>("");
+    const isVideoDeepfake = videoValidationStore((state) => state.isVideoDeepfake);
+
+    useEffect(() => {
+        console.log("isVideoDeepfake", isVideoDeepfake);
+    }, [isVideoDeepfake]);
+
+    const navigate = useNavigate();
+
+    const submitAnswerHandler = async () => {
+        const data: TTaskVideo = {
+            user: pb?.authStore?.model?.id,
+            answer_selected: answer,
+            video_isDeepFake: isVideoDeepfake
+        };
+        const record = await pb.collection('task_video').create(data);
+        return record;
     }
+
+    const handleNextClick = async () => {
+        await submitAnswerHandler();
+        navigate("/result");
+    };
+
+    const handleAnswerUpdate = (value: string) => {
+        setAnswer(value);
+    };
+
     return (
         <>
             <Navbar />
@@ -21,22 +54,22 @@ const QuizQuestion = () => {
                         <p className="text-center">
                             Based on your analysis of the video and the differences between deepfake and original videos, what is your conclusion about the video's authenticity?
                         </p>
-                        <RadioGroup defaultValue="option-one">
+                        <RadioGroup defaultValue="isDeepFake" onValueChange={handleAnswerUpdate}>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-one" id="option-one" />
-                                <Label htmlFor="option-one">The video is a deepfake based on visual inconsistencies.</Label>
+                                <RadioGroupItem value="isDeepFake" id="isDeepFake" />
+                                <Label htmlFor="isDeepFake">The video is a deepfake based on visual inconsistencies.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-two" id="option-two" />
-                                <Label htmlFor="option-two">The video is original due to the natural flow and features.</Label>
+                                <RadioGroupItem value="isOriginal" id="isOriginal" />
+                                <Label htmlFor="isOriginal">The video is original due to the natural flow and features.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-three" id="option-three" />
-                                <Label htmlFor="option-two">The video seems like a deepfake but with some original characteristics.</Label>
+                                <RadioGroupItem value="isPartiallyDeepfake" id="isPartiallyDeepfake" />
+                                <Label htmlFor="isPartiallyDeepfake">The video seems like a deepfake but with some original characteristics.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-four" id="option-four" />
-                                <Label htmlFor="option-two">The video appears original but has some deepfake traits.</Label>
+                                <RadioGroupItem value="isPartiallyOriginal" id="isPartiallyOriginal" />
+                                <Label htmlFor="isPartiallyOriginal">The video appears original but has some deepfake traits.</Label>
                             </div>
                         </RadioGroup>
                         <div className='w-full text-center'>
@@ -44,9 +77,9 @@ const QuizQuestion = () => {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         </>
-    )
-}
+    );
+};
 
-export default QuizQuestion
+export default QuizQuestion;
