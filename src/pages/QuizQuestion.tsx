@@ -19,24 +19,24 @@ const QuizQuestion = () => {
                             Quiz Question ?
                         </h1>
                         <p className="text-center">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                            Based on your analysis of the video and the differences between deepfake and original videos, what is your conclusion about the video's authenticity?
                         </p>
                         <RadioGroup defaultValue="option-one">
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="option-one" id="option-one" />
-                                <Label htmlFor="option-one">Option One</Label>
+                                <Label htmlFor="option-one">The video is a deepfake based on visual inconsistencies.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="option-two" id="option-two" />
-                                <Label htmlFor="option-two">Option Two</Label>
+                                <Label htmlFor="option-two">The video is original due to the natural flow and features.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="option-three" id="option-three" />
-                                <Label htmlFor="option-two">Option Three</Label>
+                                <Label htmlFor="option-two">The video seems like a deepfake but with some original characteristics.</Label>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="option-four" id="option-four" />
-                                <Label htmlFor="option-two">Option Four</Label>
+                                <Label htmlFor="option-two">The video appears original but has some deepfake traits.</Label>
                             </div>
                         </RadioGroup>
                         <div className='w-full text-center'>
