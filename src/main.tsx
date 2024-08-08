@@ -50,7 +50,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <div className="bg-[url(src/assets/home/background_deepfakeedu.svg)] bg-cover">
+    <div className="bg-[url(/background/background_deepfakeedu.svg)] bg-cover">
       <RouterProvider router={router} />
     </div>
   </React.StrictMode>
