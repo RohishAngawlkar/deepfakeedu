@@ -14,7 +14,7 @@ const TaskVideo: React.FC = () => {
     const navigate = useNavigate();
     const player1 = useRef<ReactPlayer>(null);
     const player2 = useRef<ReactPlayer>(null);
-    const [playing, setPlaying] = useState<boolean>(true); // Autoplay on load
+    const [playing, setPlaying] = useState<boolean>(false); // Start paused, require user interaction
     const [progress, setProgress] = useState<{ played: number }>({ played: 0 });
     const [currentPair, setCurrentPair] = useState<string[]>([]);
 
@@ -55,7 +55,16 @@ const TaskVideo: React.FC = () => {
     }, []);
 
     const handlePlayPause = () => {
-        setPlaying(!playing);
+        if (player1.current && player2.current) {
+            if (!playing) {
+                player1.current.getInternalPlayer().play();
+                player2.current.getInternalPlayer().play();
+            } else {
+                player1.current.getInternalPlayer().pause();
+                player2.current.getInternalPlayer().pause();
+            }
+            setPlaying(!playing);
+        }
     };
 
     const handleSeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +76,36 @@ const TaskVideo: React.FC = () => {
     const handleProgress = (state: { played: number }) => {
         setProgress(state);
     };
+
+    useEffect(() => {
+        if (playing) {
+            const interval = setInterval(() => {
+                const player1Time = player1.current?.getCurrentTime() || 0;
+                const player2Time = player2.current?.getCurrentTime() || 0;
+
+                if (Math.abs(player1Time - player2Time) > 0.1) {
+                    const averageTime = (player1Time + player2Time) / 2;
+                    player1.current?.seekTo(averageTime);
+                    player2.current?.seekTo(averageTime);
+                }
+            }, 100);
+
+            return () => clearInterval(interval);
+        }
+    }, [playing]);
+
+    useEffect(() => {
+        // Disable Picture-in-Picture if not already handled by the player
+        if (player1.current) {
+            const videoElement1 = player1.current.getInternalPlayer();
+            if (videoElement1) videoElement1.disablePictureInPicture = true;
+        }
+
+        if (player2.current) {
+            const videoElement2 = player2.current.getInternalPlayer();
+            if (videoElement2) videoElement2.disablePictureInPicture = true;
+        }
+    }, [currentPair]);
 
     return (
         <>
