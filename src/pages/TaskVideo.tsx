@@ -79,23 +79,36 @@ const TaskVideo: React.FC = () => {
             <Navbar />
             <div className="container mx-auto px-4 py-8">
                 <div className="flex items-center justify-center min-h-screen">
-                    <div className="space-y-5 text-center">
-                        <h1 className="font-bold text-6xl">Task Video</h1>
-                        <p>Can be deepfake or original?</p>
-                        <div>
+                    <div className="space-y-5 text-center w-full max-w-2xl">
+                        <h1 className="font-bold text-4xl md:text-6xl">Task Video</h1>
+                        <p className="text-lg md:text-xl">Can be deepfake or original?</p>
+                        <div className="relative w-full pt-[56.25%]"> {/* 16:9 Aspect Ratio */}
                             {loading ? (
                                 <p>Loading video...</p>
                             ) : (
                                 <ReactPlayer
                                     url={videoUrl ? `https://genaiedu.pockethost.io/api/files/${randomVideo?.collectionId}/${randomVideo?.id}/${videoUrl}` : ""}
-                                    controls
+                                    playing={true}  // Autoplay video
+                                    muted={true}  // Mute the video
+                                    controls={false}  // Disable controls to prevent unmuting
+                                    config={{
+                                        file: {
+                                            attributes: {
+                                                controlsList: 'nodownload',  // Prevent download
+                                                disablePictureInPicture: true,  // Disable PiP
+                                            },
+                                        },
+                                    }}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ position: 'absolute', top: 0, left: 0 }}
                                 />
                             )}
                         </div>
-                        <div>
+                        <div className="mt-6">
                             <Button
                                 onClick={handleNextClick}
-                                className="rounded-full w-1/5 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300"
+                                className="rounded-full w-full md:w-1/3 bg-[#5AE579] hover:bg-[#5AE579] hover:shadow-lg hover:shadow-[#5AE579] transition duration-300"
                             >
                                 Next
                             </Button>
