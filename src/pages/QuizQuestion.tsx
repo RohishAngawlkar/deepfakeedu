@@ -56,7 +56,7 @@ const QuizQuestion: React.FC = () => {
                         <p className="text-center text-lg md:text-xl">
                             Based on your analysis of the video and the differences between deepfake and original videos, what is your conclusion about the video's authenticity?
                         </p>
-                        <RadioGroup defaultValue="isDeepFake" onValueChange={handleAnswerUpdate}>
+                        <RadioGroup onValueChange={handleAnswerUpdate}>
                             <div className="flex flex-col space-y-4">
                                 <div className="flex items-center space-x-2">
                                     <RadioGroupItem value="isDeepFake" id="isDeepFake" />
