@@ -115,15 +115,22 @@ const RegistrationPage: React.FC = () => {
     }
 
     try {
+      // Register the user
       await pb.collection('users').create({
         email,
         password,
         passwordConfirm: confirmPassword,
         username,
       });
-      setSuccess('Registration successful. You can now log in.');
+
+      // Log in the user after successful registration
+      await pb.collection('users').authWithPassword(email, password);
+
+      setSuccess('Registration successful. You are now logged in.');
       setErrors({});
-      setTimeout(() => navigate("/login"), 2000);
+
+      // Redirect to home or dashboard after successful login
+      setTimeout(() => navigate("/"), 2000);
     } catch (err: any) {
       let errorMsg = 'Registration failed. Please try again.';
 
