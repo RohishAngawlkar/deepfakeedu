@@ -1,6 +1,6 @@
-# DeepFakeEdu
+# GenerativeAIEdu
 
-Welcome to **DeepFakeEdu**, a project focused on exploring the impact of deepfake technology on education. This repository aims to provide tools, resources, and insights into how deepfakes can be utilized or countered in educational environments. Whether you're an educator, student, or researcher, this repository offers valuable content to understand and engage with deepfake technology in a meaningful way.
+Welcome to **GenerativeAIEdu**, a project focused on exploring the impact of deepfake technology on education. This repository aims to provide tools, resources, and insights into how deepfakes can be utilized or countered in educational environments. Whether you're an educator, student, or researcher, this repository offers valuable content to understand and engage with deepfake technology in a meaningful way.
 
 ## Table of Contents
 
@@ -80,28 +80,33 @@ This repository is organized into several directories, each serving a specific p
 ## Directory Structure
 
 ```
-deepfakeedu/
+project-name/
 │
-├── deepfake_generation/
-│   ├── README.md
-│   ├── scripts/
-│   ├── models/
-│   └── examples/
+├── public/
+│   ├── assets/
+│   ├── favicon.ico
+│   └── index.html
 │
-├── detection_tools/
-│   ├── README.md
-│   ├── scripts/
-│   ├── models/
-│   └── examples/
+├── src/
+│   ├── components/
+│   │   └── QuizQuestion.tsx
+│   ├── styles/
+│   │   └── tailwind.css
+│   ├── App.tsx
+│   └── main.tsx
 │
-├── resources/
-│   ├── ethical_guidelines.md
-│   ├── case_studies/
-│   └── research_papers/
-│
-├── test_installation.py
-├── requirements.txt
-└── README.md
+├── .eslintrc.cjs
+├── .gitignore
+├── README.md
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+
 ```
 
 - **deepfake_generation/**: Contains all scripts, models, and examples for generating deepfakes.
@@ -134,4 +139,4 @@ For more information or if you have any questions, feel free to reach out via th
 
 ---
 
-Happy learning with DeepFakeEdu!
+Happy learning with GenerativeAIEdu!
